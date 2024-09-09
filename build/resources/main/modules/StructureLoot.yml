@@ -1,0 +1,19 @@
+enabled: true
+
+# Example config
+
+#structures:
+#  - ruined_portal:
+#      - emerald:
+#          Type: VANILLA
+#          Amount: 2
+#      - netherite_block:
+#          Type: VANILLA
+#          Amount: 4
+#      - cutlass:
+#          Type: MMOITEMS
+#          Category: SWORD
+#          Amount: 4
+#  - ancient_city:
+#      - diamond_sword
+#      - netherite_sword

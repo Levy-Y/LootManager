@@ -1,0 +1,16 @@
+enabled: false
+log: true
+
+blocks:
+  NETHERRACK:
+    - netherite_block:
+        type: VANILLA
+        min: 1
+        max: 5
+        override_chance: 10
+  GRASS_BLOCK:
+    - diamond:
+        type: VANILLA
+        min: 2
+        max: 10
+        override_chance: 100

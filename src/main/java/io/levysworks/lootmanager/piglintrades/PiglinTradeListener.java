@@ -7,14 +7,14 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDropItemEvent;
 
 import static io.levysworks.lootmanager.Lootmanager.trades;
-import static io.levysworks.lootmanager.Lootmanager.piblin_is_enabled;
+import static io.levysworks.lootmanager.Lootmanager.piglin_is_enabled;
 
 import java.util.Objects;
 
 public class PiglinTradeListener implements Listener {
     @EventHandler
     public void onPiglinBarter(EntityDropItemEvent event) {
-        if (!piblin_is_enabled) {
+        if (!piglin_is_enabled) {
             return;
         }
 

@@ -23,6 +23,10 @@ repositories {
     maven {
         url "https://nexus.phoenixdevt.fr/repository/maven-public/"
     }
+
+    maven {
+        url 'https://jitpack.io'
+    }
 }
 
 dependencies {
@@ -30,6 +34,7 @@ dependencies {
     compileOnly("io.th0rgal:oraxen:1.180.0")
     compileOnly('io.lumine:MythicLib-dist:1.6.2-SNAPSHOT')
     compileOnly('net.Indyuce:MMOItems-API:6.9.5-SNAPSHOT')
+    compileOnly('com.github.LoneDev6:API-ItemsAdder:3.6.1')
 }
 
 def targetJavaVersion = 21
