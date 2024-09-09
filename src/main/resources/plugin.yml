@@ -1,0 +1,14 @@
+name: lootmanager
+version: '1.0-SNAPSHOT'
+main: io.levysworks.lootmanager.Lootmanager
+api-version: '1.21'
+softdepend:
+  - Oraxen
+  - MMOItems
+  - ItemsAdder
+
+commands:
+  lootreload:
+    description: Reloads different parts of the LootManager plugin.
+    usage: /lootreload <all|piglin|structure>
+    permission: lootmanager.reload
