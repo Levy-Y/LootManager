@@ -2,6 +2,9 @@ package io.levysworks.lootmanager.blockdrops;
 
 import io.levysworks.lootmanager.ItemProviders;
 import io.levysworks.lootmanager.Lootmanager;
+import io.levysworks.lootmanager.ProviderBuilder;
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
@@ -19,6 +22,9 @@ public class ReloadBlocksConfig {
         List<BlockDrop> reloadedBlockList = new ArrayList<>();
         BlockDropsConfig.reloadConfig();
 
+        blocks_is_enabled = BlockDropsConfig.getConfig().getBoolean("enabled");
+        plugin.getLogger().info(String.format("[Blocks] Custom block drops enabled: %s", blocks_is_enabled));
+
         if (BlockDropsConfig.getConfig().isConfigurationSection("blocks")) {
             for (String block : BlockDropsConfig.getConfig().getConfigurationSection("blocks").getKeys(false)) {
                 List<Map<?, ?>> itemList = BlockDropsConfig.getConfig().getMapList("blocks." + block);
@@ -35,7 +41,17 @@ public class ReloadBlocksConfig {
 
                         ItemProviders provider = ItemProviders.valueOf(providerType);
 
-                        BlockDrop blockDrop = new BlockDrop(block, itemName, provider, min, max, overrideChance);
+                        try {
+                            Material.valueOf(block.toUpperCase());
+                        } catch (IllegalArgumentException e) {
+                            plugin.getLogger().warning(String.format("Block drop couldn't be added, as %s is not a valid source block", block));
+                            continue;
+                        }
+
+                        // TODO: MMOITems is not yet supported
+                        ItemStack builtItemStack = new ProviderBuilder().ProviderBuilder(provider, itemName, 1, null);
+
+                        BlockDrop blockDrop = new BlockDrop(block, builtItemStack, min, max, overrideChance);
                         reloadedBlockList.add(blockDrop);
                     }
                 }

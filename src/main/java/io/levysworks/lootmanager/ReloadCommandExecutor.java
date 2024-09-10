@@ -13,6 +13,7 @@ import java.util.List;
 
 import static io.levysworks.lootmanager.piglintrades.ReloadPiglinConfig.reloadPluginConfig_Piglin;
 import static io.levysworks.lootmanager.blockdrops.ReloadBlocksConfig.reloadPluginConfig_Blocks;
+import static io.levysworks.lootmanager.structureloot.ReloadStructureConfig.reloadPluginConfig_Structure;
 
 public class ReloadCommandExecutor implements CommandExecutor, TabCompleter {
 
@@ -31,8 +32,7 @@ public class ReloadCommandExecutor implements CommandExecutor, TabCompleter {
                 reloadPluginConfig_Piglin();
                 sender.sendMessage("LootManager: Piglin loot tables have been reloaded.");
             } else if (args[0].equalsIgnoreCase("structure") && sender.hasPermission("lootmanager.reload.structure")) {
-                // Reload config of the structure loot tables
-                // TODO: Add reload structure loot table config method here
+                reloadPluginConfig_Structure();
                 sender.sendMessage("LootManager: Structure loot tables have been reloaded.");
             } else if (args[0].equalsIgnoreCase("block") && sender.hasPermission("lootmanager.reload.block")) {
                 reloadPluginConfig_Blocks();
@@ -69,7 +69,7 @@ public class ReloadCommandExecutor implements CommandExecutor, TabCompleter {
     private void reloadAllLoot() {
         reloadPluginConfig_Piglin();
         reloadPluginConfig_Blocks();
-        // TODO: Add structure config reload method.
+        reloadPluginConfig_Structure();
     }
 
 }

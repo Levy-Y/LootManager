@@ -12,14 +12,19 @@ import io.levysworks.lootmanager.piglintrades.TradeItems;
 import io.levysworks.lootmanager.blockdrops.BlockBreakEventListener;
 //
 
-import org.bukkit.plugin.java.JavaPlugin;
+// Structure loot
+import io.levysworks.lootmanager.structureloot.CustomLootContainer;
+import io.levysworks.lootmanager.structureloot.LootGenerationEventListener;
+import io.levysworks.lootmanager.structureloot.ReloadStructureConfig;
+//
 
+import org.bukkit.plugin.java.JavaPlugin;
 import java.util.ArrayList;
 import java.util.List;
 
 public final class Lootmanager extends JavaPlugin {
     // Compatibility checker
-    public static CompatibilityChecker providers = new CompatibilityChecker();
+    public static CompatibilityChecker compatibilityChecker = new CompatibilityChecker();
     //
 
     // Separated config file readers
@@ -41,10 +46,16 @@ public final class Lootmanager extends JavaPlugin {
     public static List<BlockDrop> blockDrops = new ArrayList<>();
     //
 
+    // Structure loot module
+    public static boolean structure_enabled = true;
+    public static List<CustomLootContainer> structure_loadedItems = new ArrayList<>();
+    //
+
     @Override
     public void onEnable() {
-        providers.checkForPlugins();
-
+        // Check for supported plugins
+        compatibilityChecker.checkForPlugins();
+        
         // Separated config readers
         BlockDropsConfig = new ConfigReader("modules/","BlockDrops.yml");
         PiglinTradesConfig = new ConfigReader("modules/","PiglinTrades.yml");
@@ -58,6 +69,7 @@ public final class Lootmanager extends JavaPlugin {
         // Load config files
         ReloadPiglinConfig.reloadPluginConfig_Piglin();
         ReloadBlocksConfig.reloadPluginConfig_Blocks();
+        ReloadStructureConfig.reloadPluginConfig_Structure();
 
         // Register command, with tab complete
         this.getCommand("lootreload").setExecutor(new ReloadCommandExecutor());
@@ -66,14 +78,9 @@ public final class Lootmanager extends JavaPlugin {
         // Register event listeners for each "module"
         getServer().getPluginManager().registerEvents(new PiglinTradeListener(), this);
         getServer().getPluginManager().registerEvents(new BlockBreakEventListener(), this);
+        getServer().getPluginManager().registerEvents(new LootGenerationEventListener(), this);
     }
 
     @Override
-    public void onDisable() {
-        // Save each config file
-        ConfigReader.save(BlockDropsConfig);
-        ConfigReader.save(PiglinTradesConfig);
-        ConfigReader.save(StructureLootConfig);
-        //
-    }
+    public void onDisable() {}
 }

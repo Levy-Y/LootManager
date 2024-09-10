@@ -17,7 +17,9 @@ public class CompatibilityChecker {
 
             has_oraxen = true;
             Lootmanager.getPlugin(Lootmanager.class).getLogger().info("[Main] Oraxen found, hooking into it.");
-        } catch (NoClassDefFoundError ignored) {}
+        } catch (NoClassDefFoundError e) {
+            Lootmanager.getPlugin(Lootmanager.class).getLogger().warning("[Main] Unable to find Oraxen, no integration will be enabled for it");
+        }
 
         // Check for mmoitems
         try {
@@ -26,7 +28,9 @@ public class CompatibilityChecker {
 
             has_mmoitems = true;
             Lootmanager.getPlugin(Lootmanager.class).getLogger().info("[Main] MMOItems found, hooking into it.");
-        } catch (NoClassDefFoundError ignored) {}
+        } catch (NoClassDefFoundError e) {
+            Lootmanager.getPlugin(Lootmanager.class).getLogger().warning("[Main] Unable to find MMOItems, no integration will be enabled for it");
+        }
 
         // Check for itemsadder
         try {
@@ -34,6 +38,8 @@ public class CompatibilityChecker {
 
             has_itemsadder = true;
             Lootmanager.getPlugin(Lootmanager.class).getLogger().info("[Main] ItemsAdder found, hooking into it.");
-        } catch (NoClassDefFoundError ignored) {}
+        } catch (NoClassDefFoundError e) {
+            Lootmanager.getPlugin(Lootmanager.class).getLogger().warning("[Main] Unable to find ItemsAdder, no integration will be enabled for it");
+        }
     }
 }

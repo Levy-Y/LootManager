@@ -2,10 +2,8 @@ package io.levysworks.lootmanager.blockdrops;
 
 import dev.lone.itemsadder.api.CustomStack;
 import io.levysworks.lootmanager.Lootmanager;
-import io.levysworks.lootmanager.piglintrades.ItemData;
 import io.th0rgal.oraxen.api.OraxenItems;
 import io.th0rgal.oraxen.items.ItemBuilder;
-import net.Indyuce.mmoitems.MMOItems;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -29,17 +27,8 @@ public class BlockBreakEventListener implements Listener {
         }
 
         for (BlockDrop block : Lootmanager.blockDrops) {
-            Material sourceMaterial;
+            Material sourceMaterial = Material.valueOf(block.sourceBlock.toUpperCase());
             int amount = 1;
-
-            try {
-                sourceMaterial = Material.valueOf(block.sourceBlock.toUpperCase());
-            } catch (IllegalArgumentException e) {
-                if (blocks_log) {
-                    Lootmanager.getPlugin(Lootmanager.class).getLogger().warning(String.format("[Blocks] %s is not a valid block type.", block.sourceBlock));
-                }
-                continue;
-            }
 
             try {
                 amount = random.nextInt(block.min, block.max);
@@ -56,72 +45,16 @@ public class BlockBreakEventListener implements Listener {
                     World currentWorld = event.getBlock().getWorld();
 
                     event.setDropItems(false);
+                    ItemStack tempStack = block.itemStack;
 
-                    switch (block.itemProvider) {
-                        case VANILLA -> {
-                            try {
-                                currentWorld.dropItem(
-                                        brokenBlockLoc,
-                                        new ItemStack(
-                                                Material.valueOf(block.dropName.toUpperCase()),
-                                                amount
-                                                )
-                                        );
-                            } catch (IllegalArgumentException e) {
-                                if (blocks_log) {
-                                    Lootmanager.getPlugin(Lootmanager.class).getLogger().warning(String.format("[Blocks] %s isn't a valid %s item.", block.dropName, block.itemProvider.toString()));
-                                }
-                                event.setDropItems(true);
-                            }
-                        }
-                        case ORAXEN -> {
-                            if (!providers.has_oraxen) {
-                                return;
-                            }
-
-                            ItemBuilder itemBuilder = OraxenItems.getItemById(block.dropName);
-                            ItemStack builtItem = itemBuilder.build();
-
-                            if (builtItem != null) {
-                                builtItem.setAmount(amount);
-                                currentWorld.dropItem(brokenBlockLoc, builtItem);
-                            } else if (blocks_log) {
-                                Lootmanager.getPlugin(Lootmanager.class).getLogger().warning(String.format("[Blocks] Couldn't build oraxen item, with ID %s", block.dropName));
-                                event.setDropItems(true);
-                            }
-                        }
-
-                        // TODO: No MMOItem category option in the config yet, add it!
-//                        case MMOITEMS -> {
-//                            if (!providers.has_mmoitems) {
-//                                return;
-//                            }
-//
-//                            ItemStack mmoItem = MMOItems.plugin.getItems().getItem(MMOItems.plugin.getTypes().get(), itemID);
-//                            if (mmoItem != null) {
-//                                trades.items.put(mmoItem, new ItemData(chance, min_amount, max_amount));
-//                            } else {
-//                                plugin.getLogger().warning(String.format("Couldn't build mmoitem with ID: %s and Category: %s", itemID, key));
-//                            }
-//                        }
-                        case ITEMSADDER -> {
-                            if (!providers.has_itemsadder) {
-                                return;
-                            }
-
-                            CustomStack stack = CustomStack.getInstance(block.dropName);
-                            if (stack != null) {
-                                ItemStack itemStack = stack.getItemStack();
-                                itemStack.setAmount(amount);
-
-                                currentWorld.dropItem(brokenBlockLoc, itemStack);
-                            } else {
-                                Lootmanager.getPlugin(Lootmanager.class).getLogger().warning(
-                                        String.format("Cannot build ItemsAdder item, with namespaced ID %s", block.dropName)
-                                );
-                                event.setDropItems(true);
-                            }
-                        }
+                    if (tempStack != null) {
+                        tempStack.setAmount(amount);
+                        currentWorld.dropItem(brokenBlockLoc, tempStack);
+                    } else {
+                        Lootmanager.getPlugin(Lootmanager.class).getLogger().severe(
+                                String.format("[Blocks] There was an error while building an item, check the spellings in your BlockDrops.yml")
+                        );
+                        event.setDropItems(true);
                     }
 
                 } else {
